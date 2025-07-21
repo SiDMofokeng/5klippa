@@ -1,0 +1,89 @@
+/* Shared form styles */
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: #374151;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper .icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background-color: #fef9c3; /* light yellow */
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.input-wrapper input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: #fefcbf;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.checkbox-group input {
+  margin-right: 0.5rem;
+  width: auto;
+}
+
+.checkbox-group label {
+  margin: 0;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.auth-form .actions {
+  margin-top: 1rem;
+}
+
+.auth-form .btn-primary {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.auth-form .btn-primary:disabled {
+  background-color: #93c5fd;
+  cursor: default;
+}
+
+.auth-form .link {
+  font-size: 0.9rem;
+  color: #3b82f6;
+  text-decoration: none;
+  margin-left: auto;
+}
+
+.auth-form .link:hover {
+  text-decoration: underline;
+}

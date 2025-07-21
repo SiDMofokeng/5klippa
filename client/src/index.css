@@ -1,0 +1,31 @@
+/* client/src/index.css */
+
+/* 1. Reset & box-sizing */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 2. Full-screen root */
+html, body, #root {
+  width: 100%;
+  height: 100%;
+}
+
+/* 3. Base body styles */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #f3f4f6;
+  color: #111827;
+  overflow: hidden;  /* hide any horizontal scrollbars */
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* your existing global styles can follow */
