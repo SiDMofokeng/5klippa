@@ -1,5 +1,5 @@
 // client/src/components/AuthLayout.tsx
-import React, { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 import './AuthLayout.css'
 
 type Props = {
