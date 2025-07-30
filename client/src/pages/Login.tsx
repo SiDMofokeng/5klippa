@@ -1,27 +1,34 @@
 // client/src/pages/Login.tsx
+
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../components/Form.css'
 
 export default function Login() {
+  // Pull in your VITE_API_URL exactly once, inside the component:
+  const API = import.meta.env.VITE_API_URL
+
   const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
   const [remember, setRemember] = useState(false)
   const [error, setError]       = useState<string|null>(null)
-  const navigate = useNavigate()   // ← get the navigate function
+  const navigate = useNavigate()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
-    const res = await fetch('http://localhost:3000/api/login', {
+
+    // Use backticks here to interpolate the variable:
+    const res = await fetch(`${API}/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     })
+
     const data = await res.json()
     if (res.ok) {
       localStorage.setItem('token', data.session.access_token)
-      navigate('/dashboard')        // ← redirect on success
+      navigate('/dashboard')
     } else {
       setError(data.error || 'Login failed')
     }
