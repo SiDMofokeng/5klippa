@@ -2,6 +2,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+// Pull in your base API URL from Vite env:
+const API = import.meta.env.VITE_API_URL
+
 type User = {
   id: string
   email: string
@@ -23,10 +26,10 @@ export default function Dashboard() {
   const [loans, setLoans] = useState<Loan[]>([])
   const nav = useNavigate()
 
-  // Fetch current user
+  // 1️⃣ Fetch current user
   useEffect(() => {
     const token = localStorage.getItem('token')
-    fetch('http://localhost:3000/api/me', {
+    fetch(`${API}/api/me`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -37,11 +40,11 @@ export default function Dashboard() {
       .catch(() => nav('/auth?tab=login'))
   }, [nav])
 
-  // Fetch loans once user is loaded
+  // 2️⃣ Fetch loans once user is loaded
   useEffect(() => {
     if (!user) return
     const token = localStorage.getItem('token')
-    fetch('http://localhost:3000/api/loans', {
+    fetch(`${API}/api/loans`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -57,13 +60,13 @@ export default function Dashboard() {
     )
   }
 
-  // Calculate onboarding percentage
+  // Calculate onboarding progress
   const steps = ['pending_profile','pending_kyc','under_review','completed'] as const
   const pct = ((steps.indexOf(user.onboarding_status) + 1) / steps.length) * 100
 
   return (
     <div className="h-screen grid grid-cols-4 bg-gray-100">
-      {/* ─── GRADIENT SIDEBAR ────────────────────────────── */}
+      {/* ─── SIDEBAR ────────────────────────────────────── */}
       <aside
         className="col-span-1 px-6 py-8 flex flex-col justify-between text-white"
         style={{
@@ -71,12 +74,10 @@ export default function Dashboard() {
         }}
       >
         <div>
-          {/* Bigger logo/title */}
           <h2 className="text-3xl font-bold mb-6">5Klippa</h2>
           <p className="mb-8">
             Welcome, <strong>{user.username}</strong>
           </p>
-
           <nav className="space-y-2">
             <button
               onClick={() => nav('/auth?tab=register')}
@@ -98,7 +99,6 @@ export default function Dashboard() {
             </button>
           </nav>
         </div>
-
         <div className="space-y-2">
           <button
             onClick={() => nav('/profile')}
@@ -118,13 +118,13 @@ export default function Dashboard() {
         </div>
       </aside>
 
-      {/* ─── MAIN CONTENT ───────────────────────────────── */}
+      {/* ─── MAIN ───────────────────────────────────────── */}
       <main className="col-span-3 overflow-auto">
         <div className="max-w-7xl mx-auto px-8 py-10 space-y-8">
           <h1 className="text-4xl font-bold text-gray-900">Dashboard</h1>
 
-          {/* Onboarding Card */}
-          <section className="bg-white rounded-2xl shadow-md p-6 space-y-4 transition hover:shadow-lg border-l-8 border-blue-600">
+          {/* Onboarding Progress */}
+          <section className="bg-white rounded-2xl shadow-md p-6 space-y-4 border-l-8 border-blue-600 transition hover:shadow-lg">
             <h2 className="text-2xl font-semibold text-blue-600">
               Onboarding Progress
             </h2>
@@ -152,14 +152,13 @@ export default function Dashboard() {
 
           {/* Summary Widgets */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <section className="bg-blue-50 rounded-2xl shadow-md p-6 hover:shadow-lg transition flex flex-col justify-between border-l-4 border-blue-400">
+            <section className="bg-blue-50 rounded-2xl shadow-md p-6 border-l-4 border-blue-400 hover:shadow-lg transition">
               <p className="text-sm text-blue-600">Total Outstanding</p>
               <p className="mt-2 text-2xl font-semibold text-blue-900">
                 R{loans.reduce((sum, l) => sum + l.amount, 0).toFixed(2)}
               </p>
             </section>
-
-            <section className="bg-green-50 rounded-2xl shadow-md p-6 hover:shadow-lg transition flex flex-col justify-between border-l-4 border-green-400">
+            <section className="bg-green-50 rounded-2xl shadow-md p-6 border-l-4 border-green-400 hover:shadow-lg transition">
               <p className="text-sm text-green-600">Next Payment Due</p>
               <p className="mt-2 text-2xl font-semibold text-green-900">
                 {loans.length === 0
@@ -192,8 +191,7 @@ export default function Dashboard() {
                       </p>
                       <p className="text-gray-600">Purpose: {loan.purpose}</p>
                       <p className="text-sm text-gray-500">
-                        Requested on{' '}
-                        {new Date(loan.created_at).toLocaleDateString()}
+                        Requested on {new Date(loan.created_at).toLocaleDateString()}
                       </p>
                     </div>
                     <span
