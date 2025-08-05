@@ -1,10 +1,10 @@
 # 5Klippa Milestones
 
 ## Milestone 1: Environment Setup
-- [ ] Install Node.js & npm
-- [ ] Install Git
-- [ ] Install Expo CLI
-- [ ] Install CRA CLI
+- [x] Install Node.js & npm
+- [x] Install Git
+- [x] Install Expo CLI
+- [x] Install CRA CLI
 - [ ] Create Firebase project & register Web + Mobile apps
 - [ ] Scaffold Expo + CRA apps
 
