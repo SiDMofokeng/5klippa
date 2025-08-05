@@ -6,7 +6,7 @@
 - [x] Install Expo CLI
 - [x] Install CRA CLI
 - [x] Create Firebase project & register Web + Mobile apps
-- [ ] Scaffold Expo + CRA apps
+- [x] Scaffold Expo + CRA apps
 
 ## Milestone 2: Authentication & Onboarding
 - [ ] Email/password signup form
