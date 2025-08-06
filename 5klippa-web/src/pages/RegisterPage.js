@@ -1,5 +1,7 @@
 // 5klippa-web/src/pages/RegisterPage.js
 
+import AuthLayout from '../components/AuthLayout';
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -42,6 +44,7 @@ export default function RegisterPage() {
   };
 
   return (
+    <AuthLayout>
     <div style={{ maxWidth: 400, margin: 'auto', padding: '1rem' }}>
       <h2>Register</h2>
       <form onSubmit={handleRegister}>
@@ -116,5 +119,6 @@ export default function RegisterPage() {
         Already have an account? <Link to="/login">Login</Link>
       </p>
     </div>
+    </AuthLayout>
   );
 }
