@@ -1,18 +1,20 @@
 // 5klippa-web/src/pages/RegisterPage.js
 
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
+import React, { useState }                   from 'react';
+import { useNavigate, Link }                 from 'react-router-dom';
+import { createUserWithEmailAndPassword }     from 'firebase/auth';
+import { auth, db }                          from '../firebaseConfig';
+import { doc, setDoc }                       from 'firebase/firestore';
+import AuthLayout                            from '../components/AuthLayout';
+import theme                                 from '../theme';
 
 export default function RegisterPage() {
-  const [email, setEmail]             = useState('');
-  const [password, setPassword]       = useState('');
+  const [email, setEmail]           = useState('');
+  const [password, setPassword]     = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole]               = useState('borrower');
-  const [loading, setLoading]         = useState(false);
-  const [error, setError]             = useState('');
+  const [role, setRole]             = useState('borrower');
+  const [loading, setLoading]       = useState(false);
+  const [error, setError]           = useState('');
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -41,80 +43,97 @@ export default function RegisterPage() {
     }
   };
 
+  const styles = {
+    form: {
+      maxWidth: '400px',
+      margin: 'auto',
+      padding: `${theme.spacing.large}px`,
+    },
+    input: {
+      width: '100%',
+      padding: `${theme.spacing.small}px`,
+      marginBottom: `${theme.spacing.medium}px`,
+      border: `1px solid ${theme.colors.border}`,
+      borderRadius: `${theme.radii.small}px`,
+      boxSizing: 'border-box',
+    },
+    radioGroup: {
+      marginBottom: `${theme.spacing.medium}px`,
+    },
+    button: {
+      width: '100%',
+      padding: `${theme.spacing.medium}px`,
+      background: theme.colors.primary,
+      color: theme.colors.cardBackground,
+      border: 'none',
+      borderRadius: `${theme.radii.small}px`,
+      fontSize: theme.fontSizes.body,
+      cursor: 'pointer',
+    },
+    error: {
+      color: theme.colors.error,
+      marginBottom: `${theme.spacing.small}px`,
+    },
+    footer: {
+      marginTop: `${theme.spacing.medium}px`,
+      textAlign: 'center',
+    },
+  };
+
   return (
-    <div style={{ maxWidth: 400, margin: 'auto', padding: '1rem' }}>
-      <h2>Register</h2>
-      <form onSubmit={handleRegister}>
-        <div style={{ marginBottom: '0.5rem' }}>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-            style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-          />
-        </div>
-        <div style={{ marginBottom: '0.5rem' }}>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            required
-            style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-          />
-        </div>
-        <div style={{ marginBottom: '0.5rem' }}>
-          <label>Confirm Password</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={e => setConfirmPassword(e.target.value)}
-            required
-            style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-          />
-        </div>
-        <div style={{ marginBottom: '0.5rem' }}>
-          <label>Select Role</label><br/>
+    <AuthLayout>
+      <form onSubmit={handleRegister} style={styles.form}>
+        <h2 style={{ marginBottom: `${theme.spacing.medium}px` }}>Register</h2>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+          style={styles.input}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+          style={styles.input}
+        />
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={e => setConfirmPassword(e.target.value)}
+          required
+          style={styles.input}
+        />
+        <div style={styles.radioGroup}>
           <label>
             <input
               type="radio"
               value="borrower"
               checked={role === 'borrower'}
               onChange={() => setRole('borrower')}
-            />
-            Borrower
+            /> Borrower
           </label>
-          <label style={{ marginLeft: '1rem' }}>
+          <label style={{ marginLeft: `${theme.spacing.medium}px` }}>
             <input
               type="radio"
               value="lender"
               checked={role === 'lender'}
               onChange={() => setRole('lender')}
-            />
-            Lender
+            /> Lender
           </label>
         </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            width: '100%',
-            padding: '12px',
-            background: '#4A7CFF',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '4px',
-          }}
-        >
+        {error && <p style={styles.error}>{error}</p>}
+        <button type="submit" disabled={loading} style={styles.button}>
           {loading ? 'Creating…' : 'Register'}
         </button>
+        <p style={styles.footer}>
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
       </form>
-      <p style={{ marginTop: '1rem' }}>
-        Already have an account? <Link to="/login">Login</Link>
-      </p>
-    </div>
+    </AuthLayout>
   );
 }
