@@ -19,10 +19,10 @@
 - [x] Web UI alignment for auth pages
 
 ## Milestone 3: Borrower Flow – Loan Application
-- [ ] Borrower dashboard UI skeleton
-- [ ] New Loan form (amount, term, purpose)
-- [ ] Save applications to Firestore
-- [ ] List borrower’s loans
+- [x] Borrower dashboard UI skeleton
+- [x] New Loan form (amount, term, purpose)
+- [x] Save applications to Firestore
+- [x] List borrower’s loans
 
 ## Milestone 4: Lender Flow – Marketplace & Funding
 - [ ] Lender dashboard shell
