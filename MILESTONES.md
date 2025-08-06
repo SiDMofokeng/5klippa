@@ -14,6 +14,10 @@
 - [x] Persist user profile in Firestore
 - [x] Welcome dashboard shell
 
+## Sub-Milestone 2.5: Look & Feel Alignment
+- [x] Mobile UI alignment for auth screens
+- [x] Web UI alignment for auth pages
+
 ## Milestone 3: Borrower Flow – Loan Application
 - [ ] Borrower dashboard UI skeleton
 - [ ] New Loan form (amount, term, purpose)
