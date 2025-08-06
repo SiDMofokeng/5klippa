@@ -21,8 +21,26 @@ import { auth, db } from './firebaseConfig';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 
+// Wrapper that renders a top banner and a white card for auth forms
+function AuthWrapper({ children }) {
+  return (
+    <View style={styles.authWrapper}>
+      {/* Top banner */}
+      <View style={styles.banner}>
+        <Text style={styles.bannerTitle}>5Klippa</Text>
+        <Text style={styles.bannerSubtitle}>
+          Financial Freedom Starts Here
+        </Text>
+      </View>
+      {/* White card */}
+      <View style={styles.card}>
+        {children}
+      </View>
+    </View>
+  );
+}
 
-//
+
 // ——————————————————————————————————————————————————————————
 //   1) Login Screen
 //
@@ -45,48 +63,47 @@ function LoginScreen({ navigation }) {
     }
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Welcome to MicroLend</Text>
+return (
+  <AuthWrapper>
+    <Text style={styles.header}>Welcome to MicroLend</Text>
 
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        style={styles.input}
-      />
+    <TextInput
+      placeholder="Email"
+      value={email}
+      onChangeText={setEmail}
+      keyboardType="email-address"
+      autoCapitalize="none"
+      style={styles.input}
+    />
 
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
+    <TextInput
+      placeholder="Password"
+      value={password}
+      onChangeText={setPassword}
+      secureTextEntry
+      style={styles.input}
+    />
 
-      {!!error && (
-        <Text style={styles.errorText}>{error}</Text>
-      )}
+    {!!error && <Text style={styles.errorText}>{error}</Text>}
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleLogin}
-        disabled={loading}
-      >
-        <Text style={styles.buttonText}>
-          {loading ? 'Logging in…' : 'Login'}
-        </Text>
-      </TouchableOpacity>
+    <TouchableOpacity
+      style={styles.button}
+      onPress={handleLogin}
+      disabled={loading}
+    >
+      <Text style={styles.buttonText}>
+        {loading ? 'Logging in…' : 'Login'}
+      </Text>
+    </TouchableOpacity>
 
-      <View style={{ height: 12 }} />
+    <View style={{ height: 12 }} />
 
-      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.linkText}>New user? Register here</Text>
-      </TouchableOpacity>
-    </View>
-  );
+    <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+      <Text style={styles.linkText}>New user? Register here</Text>
+    </TouchableOpacity>
+  </AuthWrapper>
+);
+
 }
 
 //
@@ -134,72 +151,71 @@ function RegisterScreen({ navigation }) {
     }
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Create an Account</Text>
+return (
+  <AuthWrapper>
+    <Text style={styles.header}>Create an Account</Text>
 
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        style={styles.input}
-      />
+    <TextInput
+      placeholder="Email"
+      value={email}
+      onChangeText={setEmail}
+      keyboardType="email-address"
+      autoCapitalize="none"
+      style={styles.input}
+    />
 
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
+    <TextInput
+      placeholder="Password"
+      value={password}
+      onChangeText={setPassword}
+      secureTextEntry
+      style={styles.input}
+    />
 
-      <TextInput
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry
-        style={styles.input}
-      />
+    <TextInput
+      placeholder="Confirm Password"
+      value={confirmPassword}
+      onChangeText={setConfirmPassword}
+      secureTextEntry
+      style={styles.input}
+    />
 
-      <Text style={styles.label}>Select Role</Text>
-      <View style={styles.roleContainer}>
-        <TouchableOpacity
-          style={[
-            styles.roleButton,
-            role === 'borrower' && styles.roleSelected
-          ]}
-          onPress={() => setRole('borrower')}
-        >
-          <Text>Borrower</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.roleButton,
-            role === 'lender' && styles.roleSelected
-          ]}
-          onPress={() => setRole('lender')}
-        >
-          <Text>Lender</Text>
-        </TouchableOpacity>
-      </View>
-
-      {!!error && (
-        <Text style={styles.errorText}>{error}</Text>
-      )}
-
+    <Text style={styles.label}>Select Role</Text>
+    <View style={styles.roleContainer}>
       <TouchableOpacity
-        style={styles.button}
-        onPress={handleRegister}
-        disabled={loading}
+        style={[
+          styles.roleButton,
+          role === 'borrower' && styles.roleSelected
+        ]}
+        onPress={() => setRole('borrower')}
       >
-        <Text style={styles.buttonText}>
-          {loading ? 'Creating…' : 'Register'}
-        </Text>
+        <Text>Borrower</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[
+          styles.roleButton,
+          role === 'lender' && styles.roleSelected
+        ]}
+        onPress={() => setRole('lender')}
+      >
+        <Text>Lender</Text>
       </TouchableOpacity>
     </View>
-  );
+
+    {!!error && <Text style={styles.errorText}>{error}</Text>}
+
+    <TouchableOpacity
+      style={styles.button}
+      onPress={handleRegister}
+      disabled={loading}
+    >
+      <Text style={styles.buttonText}>
+        {loading ? 'Creating…' : 'Register'}
+      </Text>
+    </TouchableOpacity>
+  </AuthWrapper>
+);
+
 }
 
 
@@ -354,5 +370,37 @@ roleSelected: {
   backgroundColor: '#4A7CFF33',
   borderColor: '#4A7CFF',
 },
+authWrapper: {
+  flex: 1,
+  backgroundColor: '#4A7CFF',
+  alignItems: 'center',
+  paddingTop: 60,
+},
+banner: {
+  alignItems: 'center',
+  marginBottom: 20,
+},
+bannerTitle: {
+  color: '#fff',
+  fontSize: 28,
+  fontWeight: 'bold',
+},
+bannerSubtitle: {
+  color: '#fff',
+  fontSize: 16,
+  marginTop: 4,
+},
+card: {
+  width: '90%',
+  backgroundColor: '#fff',
+  borderRadius: 20,
+  padding: 20,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 6,
+  elevation: 4,
+},
+
 
 });
