@@ -8,6 +8,7 @@ import {
   Button,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -20,6 +21,7 @@ import {
 import { auth, db } from './firebaseConfig';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
+import theme from './theme';
 
 // Wrapper that renders a top banner and a white card for auth forms
 function AuthWrapper({ children }) {
@@ -263,6 +265,25 @@ function DashboardScreen({ navigation }) {
       <Text style={{ fontSize: 16, marginBottom: 24 }}>
         Role: {userData?.role}
       </Text>
+
+        {userData?.role === 'borrower' && (
+          <TouchableOpacity
+            style={[styles.button, { marginTop: theme.spacing.small }]}
+            onPress={() => navigation.navigate('BorrowerDashboard')}
+          >
+            <Text style={styles.buttonText}>Borrower Dashboard</Text>
+          </TouchableOpacity>
+        )}
+
+        {userData?.role === 'borrower' && (
+          <TouchableOpacity
+            style={[styles.button, { marginTop: theme.spacing.small }]}
+            onPress={() => navigation.navigate('NewLoan')}
+          >
+            <Text style={styles.buttonText}>New Loan</Text>
+          </TouchableOpacity>
+        )}
+
       <Button
         title="Log Out"
         onPress={async () => {
@@ -274,6 +295,61 @@ function DashboardScreen({ navigation }) {
   );
 }
 
+function BorrowerDashboardScreen() {
+  return (
+    <View style={styles.center}>
+      <Text style={styles.title}>Borrower Dashboard</Text>
+      <Text>Your loan applications and status will appear here.</Text>
+    </View>
+  );
+}
+
+function NewLoanScreen({ navigation }) {
+  const [amount, setAmount]     = useState('');
+  const [term, setTerm]         = useState('');
+  const [purpose, setPurpose]   = useState('');
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.header}>New Loan Application</Text>
+
+      <TextInput
+        placeholder="Amount (e.g. 5000)"
+        value={amount}
+        onChangeText={setAmount}
+        keyboardType="numeric"
+        style={styles.input}
+      />
+
+      <TextInput
+        placeholder="Term (months)"
+        value={term}
+        onChangeText={setTerm}
+        keyboardType="numeric"
+        style={styles.input}
+      />
+
+      <TextInput
+        placeholder="Purpose"
+        value={purpose}
+        onChangeText={setPurpose}
+        multiline
+        numberOfLines={3}
+        style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
+      />
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          /* logic to save loan will go here */
+          navigation.goBack();
+        }}
+      >
+        <Text style={styles.buttonText}>Submit Application</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+}
 
 // Navigator setup
 const Stack = createNativeStackNavigator();
@@ -285,6 +361,8 @@ export default function App() {
         <Stack.Screen name="Login"    component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Dashboard"component={DashboardScreen} />
+        <Stack.Screen name="BorrowerDashboard" component={BorrowerDashboardScreen} />
+        <Stack.Screen name="NewLoan"           component={NewLoanScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -292,115 +370,115 @@ export default function App() {
 
 // Styles
 const styles = StyleSheet.create({
+  authWrapper: {
+    flex: 1,
+    backgroundColor: theme.colors.primary,
+    alignItems: 'center',
+    paddingTop: theme.spacing.large,
+  },
+  banner: {
+    alignItems: 'center',
+    marginBottom: theme.spacing.large,
+  },
+  bannerTitle: {
+    color: theme.colors.cardBackground,
+    fontSize: theme.fontSizes.h1,
+    fontWeight: 'bold',
+  },
+  bannerSubtitle: {
+    color: theme.colors.cardBackground,
+    fontSize: theme.fontSizes.body,
+    marginTop: theme.spacing.xsmall,
+  },
+  card: {
+    width: '90%',
+    backgroundColor: theme.colors.cardBackground,
+    borderRadius: theme.radii.large,
+    padding: theme.spacing.medium,
+    ...theme.shadows.default,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#f8f8f8',
-    padding: 20,
+    backgroundColor: theme.colors.background,
+    padding: theme.spacing.medium,
     justifyContent: 'center',
-  },
-  center: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 16,
-    backgroundColor: '#f8f8f8',
   },
   header: {
-    fontSize: 24,
+    color: theme.colors.text,
+    fontSize: theme.fontSizes.h2,
     fontWeight: 'bold',
-    marginBottom: 24,
+    marginBottom: theme.spacing.large,
     textAlign: 'center',
-  },
-  title: {
-    fontSize: 18,
-    marginBottom: 24,
   },
   input: {
     height: 48,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    marginBottom: 16,
-    backgroundColor: '#fff',
+    borderColor: theme.colors.border,
+    borderRadius: theme.radii.medium,
+    paddingHorizontal: theme.spacing.small,
+    marginBottom: theme.spacing.small,
+    backgroundColor: theme.colors.cardBackground,
+    color: theme.colors.text,
   },
   button: {
     height: 48,
-    backgroundColor: '#4A7CFF',
-    borderRadius: 8,
+    backgroundColor: theme.colors.primary,
+    borderRadius: theme.radii.medium,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: theme.spacing.small,
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
+    color: theme.colors.cardBackground,
+    fontSize: theme.fontSizes.body,
     fontWeight: '600',
   },
   linkText: {
-    color: '#4A7CFF',
-    fontSize: 14,
+    color: theme.colors.primary,
+    fontSize: theme.fontSizes.small,
     textAlign: 'center',
+    marginTop: theme.spacing.xsmall,
   },
   errorText: {
-    color: 'red',
+    color: theme.colors.error,
     textAlign: 'center',
-    marginBottom: 12,
-  },
-  spacer: {
-    height: 12,
+    marginBottom: theme.spacing.small,
   },
   label: {
-  fontSize: 14,
-  marginBottom: 8,
-  color: '#555',
-},
-roleContainer: {
-  flexDirection: 'row',
-  justifyContent: 'space-around',
-  marginBottom: 16,
-},
-roleButton: {
-  paddingVertical: 10,
-  paddingHorizontal: 20,
-  borderWidth: 1,
-  borderColor: '#ccc',
-  borderRadius: 8,
-},
-roleSelected: {
-  backgroundColor: '#4A7CFF33',
-  borderColor: '#4A7CFF',
-},
-authWrapper: {
-  flex: 1,
-  backgroundColor: '#4A7CFF',
-  alignItems: 'center',
-  paddingTop: 60,
-},
-banner: {
-  alignItems: 'center',
-  marginBottom: 20,
-},
-bannerTitle: {
-  color: '#fff',
-  fontSize: 28,
-  fontWeight: 'bold',
-},
-bannerSubtitle: {
-  color: '#fff',
-  fontSize: 16,
-  marginTop: 4,
-},
-card: {
-  width: '90%',
-  backgroundColor: '#fff',
-  borderRadius: 20,
-  padding: 20,
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.1,
-  shadowRadius: 6,
-  elevation: 4,
-},
-
-
+    fontSize: theme.fontSizes.small,
+    marginBottom: theme.spacing.xsmall,
+    color: theme.colors.textMuted,
+  },
+  roleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: theme.spacing.small,
+  },
+  roleButton: {
+    paddingVertical: theme.spacing.small,
+    paddingHorizontal: theme.spacing.medium,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: theme.radii.medium,
+  },
+  roleSelected: {
+    backgroundColor: theme.colors.primary + '33',
+    borderColor: theme.colors.primary,
+  },
+  spacer: {
+    height: theme.spacing.small,
+  },
+    center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: theme.spacing.medium,
+    backgroundColor: theme.colors.background,
+  },
+  title: {
+    color: theme.colors.text,
+    fontSize: theme.fontSizes.h2,
+    fontWeight: 'bold',
+    marginBottom: theme.spacing.medium,
+  },
 });
