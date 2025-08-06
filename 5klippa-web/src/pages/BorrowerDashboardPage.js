@@ -21,11 +21,9 @@ export default function BorrowerDashboardPage() {
           where('borrowerId', '==', user.uid)
         );
         const snapshot = await getDocs(q);
-        const apps = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setApplications(apps);
+        setApplications(
+          snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        );
       } catch (e) {
         console.error('Error fetching applications:', e);
       } finally {
@@ -61,14 +59,24 @@ export default function BorrowerDashboardPage() {
     },
     card: {
       background: theme.colors.cardBackground,
-      borderRadius: `${theme.radii.small}px`,
+      borderRadius: `${theme.radii.medium}px`,            // more rounding
       padding: `${theme.spacing.medium}px`,
-      boxShadow: theme.shadows.default,
+      boxShadow: '0 6px 20px rgba(0,0,0,0.1)',              // deeper shadow
       marginBottom: `${theme.spacing.medium}px`,
+      borderLeft: `4px solid ${theme.colors.primary}`,     // accent stripe
     },
     cardText: {
       margin: 0,
       color: theme.colors.text,
+    },
+    status: {
+      display: 'inline-block',
+      padding: '2px 8px',
+      background: theme.colors.primary,
+      color: theme.colors.cardBackground,
+      borderRadius: `${theme.radii.small}px`,
+      fontSize: theme.fontSizes.small,
+      fontWeight: '600',
     },
     primaryButton: {
       width: '100%',
@@ -116,7 +124,8 @@ export default function BorrowerDashboardPage() {
                 <strong>Term:</strong> {app.term} months
               </p>
               <p style={styles.cardText}>
-                <strong>Status:</strong> {app.status}
+                <strong>Status:</strong>{' '}
+                <span style={styles.status}>{app.status}</span>
               </p>
             </div>
           ))
