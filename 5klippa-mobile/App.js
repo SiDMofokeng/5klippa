@@ -275,15 +275,6 @@ function DashboardScreen({ navigation }) {
           </TouchableOpacity>
         )}
 
-        {userData?.role === 'borrower' && (
-          <TouchableOpacity
-            style={[styles.button, { marginTop: theme.spacing.small }]}
-            onPress={() => navigation.navigate('NewLoan')}
-          >
-            <Text style={styles.buttonText}>New Loan</Text>
-          </TouchableOpacity>
-        )}
-
       <Button
         title="Log Out"
         onPress={async () => {
@@ -295,14 +286,23 @@ function DashboardScreen({ navigation }) {
   );
 }
 
-function BorrowerDashboardScreen() {
+function BorrowerDashboardScreen({ navigation }) {
   return (
     <View style={styles.center}>
       <Text style={styles.title}>Borrower Dashboard</Text>
       <Text>Your loan applications and status will appear here.</Text>
+
+      {/* New Loan button moved here */}
+      <TouchableOpacity
+        style={[styles.button, { marginTop: theme.spacing.medium }]}
+        onPress={() => navigation.navigate('NewLoan')}
+      >
+        <Text style={styles.buttonText}>New Loan</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
 
 function NewLoanScreen({ navigation }) {
   const [amount, setAmount]     = useState('');
