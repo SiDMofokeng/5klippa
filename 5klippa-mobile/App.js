@@ -1,6 +1,6 @@
 // 5klippa-mobile/App.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -19,7 +19,7 @@ import {
   onAuthStateChanged
 } from 'firebase/auth';
 import { auth, db } from './firebaseConfig';
-import { doc, setDoc, getDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 
 import theme from './theme';
 
@@ -287,21 +287,67 @@ function DashboardScreen({ navigation }) {
 }
 
 function BorrowerDashboardScreen({ navigation }) {
-  return (
-    <View style={styles.center}>
-      <Text style={styles.title}>Borrower Dashboard</Text>
-      <Text>Your loan applications and status will appear here.</Text>
+  const [applications, setApplications] = useState([]);
+  const [loadingApps, setLoadingApps]   = useState(true);
 
-      {/* New Loan button moved here */}
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        const user = auth.currentUser;
+        // Query applications for this borrowerId
+        const q = query(
+          collection(db, 'applications'),
+          where('borrowerId', '==', user.uid)
+        );
+        const snapshot = await getDocs(q);
+        const apps = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setApplications(apps);
+      } catch (e) {
+        console.error('Error fetching applications:', e);
+      } finally {
+        setLoadingApps(false);
+      }
+    };
+    fetchApplications();
+  }, []);
+
+  if (loadingApps) {
+    return (
+      <View style={styles.center}>
+        <Text>Loading your loans…</Text>
+      </View>
+    );
+  }
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.header}>Borrower Dashboard</Text>
+      {applications.length === 0 ? (
+        <Text style={styles.linkText}>No loan applications yet.</Text>
+      ) : (
+        applications.map(app => (
+          <View key={app.id} style={styles.card}>
+            <Text style={{ fontWeight: '600' }}>Amount: {app.amount}</Text>
+            <Text>Term: {app.term} months</Text>
+            <Text>Status: {app.status}</Text>
+          </View>
+        ))
+      )}
+
+      {/* New Loan button */}
       <TouchableOpacity
-        style={[styles.button, { marginTop: theme.spacing.medium }]}
+        style={[styles.button, { marginTop: theme.spacing.large }]}
         onPress={() => navigation.navigate('NewLoan')}
       >
         <Text style={styles.buttonText}>New Loan</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
+
 
 
 function NewLoanScreen({ navigation }) {
