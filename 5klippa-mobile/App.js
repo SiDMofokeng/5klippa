@@ -19,7 +19,7 @@ import {
   onAuthStateChanged
 } from 'firebase/auth';
 import { auth, db } from './firebaseConfig';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 import theme from './theme';
 
@@ -305,9 +305,40 @@ function BorrowerDashboardScreen({ navigation }) {
 
 
 function NewLoanScreen({ navigation }) {
-  const [amount, setAmount]     = useState('');
-  const [term, setTerm]         = useState('');
-  const [purpose, setPurpose]   = useState('');
+  const [amount, setAmount]   = useState('');
+  const [term, setTerm]       = useState('');
+  const [purpose, setPurpose] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState('');
+
+  const handleSubmit = async () => {
+    setError('');
+    // Basic validation
+    if (!amount || !term || !purpose) {
+      setError('All fields are required.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const user = auth.currentUser;
+      // Write to Firestore
+      await addDoc(collection(db, 'applications'), {
+        borrowerId: user.uid,
+        amount: parseFloat(amount),
+        term: parseInt(term, 10),
+        purpose,
+        status: 'pending',
+        createdAt: serverTimestamp(),
+      });
+      // Navigate back on success
+      navigation.goBack();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -338,18 +369,23 @@ function NewLoanScreen({ navigation }) {
         style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
       />
 
+      {!!error && (
+        <Text style={styles.errorText}>{error}</Text>
+      )}
+
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {
-          /* logic to save loan will go here */
-          navigation.goBack();
-        }}
+        onPress={handleSubmit}
+        disabled={loading}
       >
-        <Text style={styles.buttonText}>Submit Application</Text>
+        <Text style={styles.buttonText}>
+          {loading ? 'Submitting…' : 'Submit Application'}
+        </Text>
       </TouchableOpacity>
     </ScrollView>
   );
 }
+
 
 // Navigator setup
 const Stack = createNativeStackNavigator();
