@@ -1,57 +1,56 @@
 // 5klippa-web/src/components/AuthLayout.js
 
 import React from 'react';
+import theme from '../theme';
 
 const styles = {
   container: {
     display: 'flex',
     minHeight: '100vh',
-    fontFamily: 'sans-serif',
   },
   hero: {
     flex: 1,
-    background: '#4A7CFF',
+    background: theme.colors.primary,
     color: '#fff',
-    padding: '2rem',
+    padding: theme.spacing.large + 'px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
   },
   heroTitle: {
-    fontSize: '2.5rem',
+    fontSize: theme.fontSizes.h1,
     fontWeight: 'bold',
-    marginBottom: '1rem',
+    marginBottom: theme.spacing.medium + 'px',
   },
   heroSubtitle: {
-    fontSize: '1.1rem',
-    marginBottom: '2rem',
+    fontSize: theme.fontSizes.body,
+    marginBottom: theme.spacing.large + 'px',
   },
-  // Simple feature grid placeholder
   features: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
-    gap: '1rem',
+    gap: theme.spacing.medium + 'px',
   },
   featureItem: {
-    background: '#fff2',
-    padding: '0.75rem',
-    borderRadius: '8px',
-    fontSize: '0.9rem',
+    background: theme.colors.cardBackground + '20',
+    padding: theme.spacing.small + 'px',
+    borderRadius: theme.radii.small + 'px',
+    fontSize: theme.fontSizes.small,
   },
   cardContainer: {
     flex: 1,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '2rem',
+    padding: theme.spacing.large + 'px',
   },
   card: {
     width: '100%',
     maxWidth: '400px',
-    background: '#fff',
-    borderRadius: '20px',
-    padding: '2rem',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+    background: theme.colors.cardBackground,
+    borderRadius: theme.radii.large + 'px',
+    padding: theme.spacing.large + 'px',
+    boxShadow: theme.shadows.default,
   },
   // Responsive: stack on small screens
   '@media(max-width:600px)': {
