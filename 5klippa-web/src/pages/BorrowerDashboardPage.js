@@ -2,13 +2,27 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthLayout from '../components/AuthLayout';
-import theme from '../theme';
+import AuthLayout      from '../components/AuthLayout';
+import theme           from '../theme';
 
 export default function BorrowerDashboardPage() {
   const navigate = useNavigate();
+
   const styles = {
-    title: {
+    container: {
+      maxWidth: '400px',
+      margin: 'auto',
+      padding: `${theme.spacing.large}px`,
+    },
+    backButton: {
+      marginBottom: `${theme.spacing.medium}px`,
+      background: 'transparent',
+      color: theme.colors.textMuted,
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: theme.fontSizes.body,
+    },
+    heading: {
       color: theme.colors.text,
       fontSize: theme.fontSizes.h2,
       fontWeight: 'bold',
@@ -18,7 +32,7 @@ export default function BorrowerDashboardPage() {
       color: theme.colors.textMuted,
       marginBottom: `${theme.spacing.large}px`,
     },
-    button: {
+    primaryButton: {
       width: '100%',
       padding: `${theme.spacing.medium}px`,
       background: theme.colors.primary,
@@ -32,13 +46,19 @@ export default function BorrowerDashboardPage() {
 
   return (
     <AuthLayout>
-      <div style={{ maxWidth: '400px', margin: 'auto', padding: `${theme.spacing.large}px` }}>
-        <h2 style={styles.title}>Borrower Dashboard</h2>
+      <div style={styles.container}>
+        <button
+          style={styles.backButton}
+          onClick={() => navigate('/dashboard')}
+        >
+          ← Back
+        </button>
+        <h1 style={styles.heading}>Borrower Dashboard</h1>
         <p style={styles.subtitle}>
           Your loan applications and status will appear here.
         </p>
         <button
-          style={styles.button}
+          style={styles.primaryButton}
           onClick={() => navigate('/new-loan')}
         >
           New Loan
