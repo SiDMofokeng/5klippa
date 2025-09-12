@@ -1,0 +1,111 @@
+// firestore.rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helpers
+    function authed() {
+      return request.auth != null;
+    }
+    function isOwner(uid) {
+      return authed() && request.auth.uid == uid;
+    }
+    function isAdmin() {
+      return authed() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+    // ---------------- users ----------------
+    match /users/{uid} {
+      // You can read your own profile; admin can read anyone
+      allow read: if isOwner(uid) || isAdmin();
+
+      // Create your own doc on first write (merge from client ok)
+      allow create: if isOwner(uid);
+
+      // Update your own doc (profile/onboarding); admin can update any
+      allow update: if isOwner(uid) || isAdmin();
+    }
+
+    // ---------------- applications ----------------
+    // Borrower applications (create/read own; cancel own; admin override)
+    match /applications/{appId} {
+      allow read: if authed() && (
+        resource.data.borrowerId == request.auth.uid || isAdmin()
+      );
+
+      // Anyone signed-in may create an application for themselves
+      allow create: if authed() && request.resource.data.borrowerId == request.auth.uid;
+
+      // Borrower may cancel ONLY: status -> 'cancelled', preserve others; admin can update anything
+      allow update: if isAdmin()
+        || (
+          authed()
+          && resource.data.borrowerId == request.auth.uid
+          // allow only a single-field change: status to 'cancelled'
+          && request.resource.data.diff(resource.data).changedKeys().hasOnly(['status'])
+          && request.resource.data.status == 'cancelled'
+        );
+    }
+
+    // ---------------- wallets ----------------
+    // Each user has wallets/{uid}. Users manage their own wallet; admin can read/update all.
+    match /wallets/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid) || isAdmin();
+      allow update: if isOwner(uid) || isAdmin();
+    }
+
+    // ---------------- referrals ----------------
+    // Document ID is the code. Anyone may read (to validate). Owners create/toggle; any authed may consume via +1 (with checks); admin override.
+    match /referrals/{code} {
+      // public read for client-side validation
+      allow read: if true;
+
+      // owner (or admin) may create their own code
+      allow create: if (
+        (authed() && request.resource.data.ownerUid == request.auth.uid) || isAdmin()
+      )
+      && request.resource.data.maxUses is int
+      && request.resource.data.maxUses >= 1
+      && request.resource.data.maxUses <= 100
+      && request.resource.data.usedCount == 0
+      && request.resource.data.active == true;
+
+      // update paths:
+      // A) any authed user can CONSUME a code by incrementing usedCount by exactly +1 (nothing else)
+      // B) owner can toggle ONLY 'active'
+      // C) admin can update anything
+      allow update: if isAdmin()
+        || (
+          authed()
+          && request.resource.data.ownerUid == resource.data.ownerUid
+          // consume path: exactly +1, within limit, and no other fields changed except lastUsedAt timestamps
+          && request.resource.data.maxUses == resource.data.maxUses
+          && request.resource.data.active == resource.data.active
+          && request.resource.data.usedCount == resource.data.usedCount + 1
+          && request.resource.data.usedCount <= resource.data.maxUses
+        )
+        || (
+          authed()
+          && request.auth.uid == resource.data.ownerUid
+          // owner may toggle ONLY 'active'
+          && request.resource.data.diff(resource.data).changedKeys().hasOnly(['active'])
+        );
+    }
+
+    // ---------------- referralRedemptions ----------------
+    // Created client-side in the same transaction as consuming a referral.
+    // Let the authed user create a record for themselves; admin can read all.
+    match /referralRedemptions/{rid} {
+      allow read: if isAdmin() || (
+        authed() && resource.data.userUid == request.auth.uid
+      );
+      allow create: if authed() && request.resource.data.userUid == request.auth.uid;
+      // no client updates/deletes needed
+      allow update, delete: if false;
+    }
+
+    // ------------- add other collections here as needed -------------
+  }
+}

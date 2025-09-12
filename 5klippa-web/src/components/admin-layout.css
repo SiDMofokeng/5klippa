@@ -1,0 +1,48 @@
+/* ===== Admin layout knobs (tune as you like) ===== */
+:root{
+  --admin-sidebar-w: 260px;  /* match the real width of your left menu */
+  --admin-max: 1120px;       /* content width target */
+  --admin-pad: 24px;         /* page gutter */
+}
+
+/* Leaves room for the fixed sidebar */
+.admin-main{
+  margin-left: var(--admin-sidebar-w);
+  padding: var(--admin-pad);
+  min-width: 0;
+}
+
+/* Centers and constrains the page body */
+.admin-container{
+  max-width: var(--admin-max);
+  margin: 0 auto;
+}
+
+/* Consistent section spacing + card + tables */
+.admin-title{ margin: 0 0 8px; font-weight: 700; font-size: 20px; }
+.admin-muted{ margin: 0 0 14px; color: #6b7280; font-size: 13px; }
+.admin-section{ margin-top: 16px; }
+
+.admin-card{
+  width: 100%;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(16,24,40,.06);
+  padding: 16px 18px;
+}
+
+.admin-table{ width: 100%; border-collapse: separate; border-spacing: 0; }
+.admin-table th, .admin-table td{ padding: 12px 16px; }
+
+/* Overview metrics grid */
+.admin-grid{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* On smaller viewports the sidebar overlays—don’t offset content */
+@media (max-width: 1024px){
+  .admin-main{ margin-left: 0; }
+  .admin-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+}

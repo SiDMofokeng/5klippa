@@ -5,9 +5,10 @@ import theme from '../theme';
 
 const styles = {
   container: {
-    display: 'flex',
+    display: 'grid',
     minHeight: '100vh',
     fontFamily: 'sans-serif',
+    gridTemplateColumns: '580px 1fr',
   },
   hero: {
     flex: 1,

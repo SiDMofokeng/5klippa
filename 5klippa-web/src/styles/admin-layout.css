@@ -1,0 +1,35 @@
+:root{
+  --admin-sidebar-w: 260px;   /* left nav width */
+  --admin-page-pad: 28px;     /* padding around the right side */
+  --admin-max: 1120px;        /* max width of the right content */
+}
+
+.admin-shell{ display:flex; min-height:100vh; background:#F7F9FC; }
+
+.admin-sidenav{
+  position:fixed; inset:0 auto 0 0; width:var(--admin-sidebar-w);
+}
+
+.admin-main{
+  margin-left:var(--admin-sidebar-w);
+  width:calc(100% - var(--admin-sidebar-w));
+  padding:var(--admin-page-pad);
+}
+
+.admin-inner{ max-width:var(--admin-max); margin:0 auto; }
+
+.card{
+  background:#fff; border-radius:14px;
+  box-shadow:0 8px 28px rgba(16,24,40,.08);
+  padding:18px 20px;
+}
+
+.table-card{ overflow-x:auto; }
+.table-card table{ width:100%; border-collapse:collapse; }
+.table-card th, .table-card td{
+  padding:10px 14px; font-size:14px; white-space:nowrap;
+  border-bottom:1px solid #eef1f6;
+}
+.table-card thead th{ color:#475467; font-weight:600; }
+
+@media (min-width:1440px){ :root{ --admin-max:1220px; } }
