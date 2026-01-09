@@ -9,16 +9,16 @@
 - [x] Scaffold Expo + CRA apps
 
 ## Milestone 2: Authentication & Onboarding
-- [ ] Email/password signup form
-- [ ] Role selection (Borrower/Lender)
-- [ ] Persist user profile in Firestore
-- [ ] Welcome dashboard shell
+- [x] Email/password signup form
+- [x] Role selection (Borrower/Lender)
+- [x] Persist user profile in Firestore
+- [x] Welcome dashboard shell
 
 ## Milestone 3: Borrower Flow – Loan Application
-- [ ] Borrower dashboard UI skeleton
-- [ ] New Loan form (amount, term, purpose)
-- [ ] Save applications to Firestore
-- [ ] List borrower’s loans
+- [x] Borrower dashboard UI skeleton
+- [x] New Loan form (amount, term, purpose)
+- [x] Save applications to Firestore
+- [x] List borrower’s loans
 
 ## Milestone 4: Lender Flow – Marketplace & Funding
 - [ ] Lender dashboard shell
