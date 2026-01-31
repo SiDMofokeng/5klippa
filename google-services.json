@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "79385704540",
+    "project_id": "klippa-24948",
+    "storage_bucket": "klippa-24948.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79385704540:android:3c79a5ebf1e8c19ee5ce99",
+        "android_client_info": {
+          "package_name": "com.meetsa.fiveklippa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUxWtardDECk61Yrj3KqToVNt3-6eUl4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
